@@ -1,0 +1,19 @@
+{
+  "name": "starter-theme-dev",
+  "version": "1.0.0",
+  "description": "Starter theme build with Piret. Built on Elementor Hello theme.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com:rtuulik/wp-starter-theme.git"
+  },
+  "author": "Reigo Tuulik",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sass": "^4.1.0"
+  }
+}
