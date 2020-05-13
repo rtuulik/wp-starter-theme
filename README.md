@@ -12,6 +12,18 @@ Built on Elementor Hello theme(so that Piret can participate by styling)
 5. cd to new folder
 6. Run new gulpfile, "gulp". It will build styles and output a new child theme with everything running in order
 
+// Folders:
+
+7. BuildChildTheme  
+   // Contains all parts, you choose options and run "gulp build", outputs result to /dev/ folder. Run only once.
+8. Dev/actual child theme code.  
+   // This is where you edit your css & JS and make edits to templates where needed.  
+   run "gulp" to get all the sass to concat&minified, etc  
+   Outputs final, uploadable theme parts to the /build/ folder
+9. Final Build folder. Just copy and upload contents  
+   // local dev server takes their theme files from here. There are no changes made here  
+   Just upload contents from this folder to live server if you want to update
+
 ## List of tasks and designs you can automate using this
 
 ### Finished tasks and their commands

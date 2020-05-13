@@ -1,11 +1,13 @@
 /*
-* Separate gulpfile, that separates and contains all WP specific build processes from the main gulpfile.
-* 
-* Include WP gulpfile, if gulpfile.js settings.wordpress = true;
 *
 */
 
 const wpSettings = {
+
+	createChildTheme: false,	
+
+
+
 	noComments = true,	// hide all comments from admin  
 	styleLoginPage = true,	// styles login page based on new logo, and main theme colors
 	redirectAttachmentPages: true, // redirect attachment pages to parent post
@@ -38,6 +40,7 @@ const wpFilePaths = {
 * To Do:
 * - Test & verify that redirect-attachmnet-pages works correctly (tõstsin lihtsalt plugina pealt ümber php faili)
 * - Strip PHP failide aslgusest <?php kui sa need lihtsalt functions.php-sse enqueued. (samas äkki parem lihtsalt /include-da function.php-sse?)
+-  käi kõik functions.php-sse minevad koodijupid üle, ja vaata et oleks reigo-xxx nimedel ees. Unified standard, ja väldib ninmekonflikte
 *
 */
 
