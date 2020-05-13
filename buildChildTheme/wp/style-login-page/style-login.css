@@ -1,0 +1,107 @@
+/* specific selectors for the login page and what they control */
+/* 
+Selector											Modifies
+body.login											The page background
+body.login div#login h1 a							The WordPress logo
+body.login div#login form#loginform					The white box that contains the form
+body.login div#login form#loginform p label			The username and password field labels
+body.login div#login form#loginform input			Both input fields (username and password)
+body.login div#login form#loginform input#user_login	Just the username input field
+body.login div#login form#loginform input#user_pass		Just the password input field
+body.login div#login form#loginform p.forgetmenot		The Remember Me field
+body.login div#login form#loginform p.submit input#wp-submit	The Submit button
+body.login div#login p#nav a							The Lost Your Password link
+body.login div#login p#backtoblog a						The Back to link
+ */
+
+:root {
+	--background: #b7c62c;
+	--button-color: #c1377d;
+	--button-hover: #a81e64;
+
+	/*	
+* list of variables used in this file:
+* 
+* background-color
+* logo image file location (ant filetype)
+* logo image height
+* button color
+* button-hover color
+*
+* Add:
+* automatically import form stylings
+* automatically importbutton stylings
+*/
+}
+
+body.login {
+	background-color: var(--background);
+}
+
+body.login div#login h1 a {
+	background-image: url("logo.svg");
+}
+
+/* have to manually adjust the logo image height */
+.login h1 a {
+	background-size: auto;
+	width: 100%;
+	height: 121px;
+}
+
+/* custom login form styling */
+.login form {
+	border-radius: 25px;
+	padding: 26px 24px 30px;
+}
+
+.login form .input,
+.login input[type="password"],
+.login input[type="text"] {
+	height: 55px;
+	font-family: Merriweather, georgia, serif;
+	line-height: 2;
+	letter-spacing: 0;
+	padding: 0 20px;
+	text-align: left;
+	border-radius: 100px;
+	margin-bottom: 20px;
+	text-indent: 20px;
+	width: 100%;
+	box-sizing: border-box;
+	background-color: #323d64;
+	border: 1px solid #c4c4c4;
+	color: #787878;
+	background: #f7f7f7;
+	font-size: 18px;
+}
+/* adjust show password eye to same height as new form */
+.login .button.wp-hide-pw {
+	min-height: 55px;
+
+	color: var(--button-color);
+	opacity: 0.5;
+}
+
+#login form p.submit {
+	margin-top: 16px;
+}
+
+/* custom button styling */
+body.login div#login form#loginform p.submit input#wp-submit {
+	background: var(--button-color);
+	border-color: var(--button-color);
+
+	border-radius: 25px;
+	padding: 5px 30px;
+}
+
+body.login div#login form#loginform p.submit input#wp-submit:hover,
+body.login div#login form#loginform p.submit input#wp-submit:focus,
+body.login div#login form#loginform p.submit input#wp-submit.active {
+	background: var(--button-hover);
+	border-color: var(--button-hover);
+}
+body.login div#login form#loginform p.submit input#wp-submit:focus {
+	box-shadow: 0 0 0 1px #fff, 0 0 0 3px var(--button-hover);
+}
