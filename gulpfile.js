@@ -1,78 +1,137 @@
-// Importing specific gulp API functions lets us write them below as series() instead of gulp.series()
-const { src, dest, watch, series, parallel } = require("gulp");
+/**
+ * Settings
+ * Turn on/off build features
+ */
+const settings = {
+	clean: true,
+	styles: true, // sass files
+	scripts: true,
+	images: true,
+	fonts: true,
+	bustCache: true,
+	//	reload: true,
 
-// Importing all the Gulp-related packages we want to use
-// CSS packages:
+	wordpress: false,
+};
+
+/**
+ * Paths to project files
+ */
+const filePaths = {
+	input: "src/",
+	output: "dist/",
+	styles: {
+		input: "src/scss/**/*.scss",
+		output: "dist/css/",
+	},
+	scripts: {
+		input: "src/js/**/*.js",
+		output: "dist/js/",
+	},
+	images: {
+		input: "src/img/**/*.+(svg|png)",
+		output: "dist/img/",
+	},
+	fonts: {
+		input: "src/fonts/**/*.+(woff|woff2)",
+		output: "dist/fonts/",
+	},
+	bustCache: ["footer.php", "header.php"],
+};
+
+// General modules
+const { src, dest, watch, series, parallel } = require("gulp"); // Importing specific gulp API functions lets us write them below as series() instead of gulp.series()
+const del = require("del"); // Delete files and directories using globs
+const rename = require("gulp-rename");
 const sourcemaps = require("gulp-sourcemaps"); // maps the CSS styles back to the original SCSS file in your browser dev tools
+const replace = require("gulp-replace"); // add a string parameter to CSS/JS references for cache bust
+
+// Styles
 const sass = require("gulp-sass"); //  compiles SCSS to CSS
 const postcss = require("gulp-postcss"); // runs autoprefixer and cssnano
 const autoprefixer = require("autoprefixer"); // adds vendor prefixes to CSS
 const cssnano = require("cssnano"); // minifies CSS
-// JS packages:
+
+// Scripts
 const concat = require("gulp-concat"); // concatenates multiple JS files into one file
 const uglify = require("gulp-uglify"); // minifies JS
-// Other packages:
-const replace = require("gulp-replace"); // add a string parameter to CSS/JS references for cache bust
 
-// Currently unused packages
-const del = require("del"); // Delete files and directories using globs
-// Built-in support for sourcemaps was added - the gulp-sourcemaps plugin is no longer necessary!	???
-
-// File paths
-const files = {
-	scssPath: "src/scss/**/*.scss",
-	jsPath: "src/js/**/*.js",
-	imagePath: "src/img/**/*.+(svg|png)",
-	fontsPath: "src/fonts/**/*.+(woff|woff2)",
-	cacheBustPath: ["footer.php", "header.php"], // Doesn´t work currently. Only works on header.php, and it works even when you remove it from the path completely :/
-};
+/**
+ * Gulp Tasks
+ */
 
 // Sass task: compiles the style.scss file into style.css
-function scssTask() {
-	return src(files.scssPath)
+const buildStyles = function (done) {
+	// Make sure this feature is activated before running
+	if (!settings.styles) return done();
+
+	return src(filePaths.styles.input)
 		.pipe(sourcemaps.init()) // sourcemaps needs to be added first after src()
 		.pipe(sass()) // does the compiling of all the SCSS files to one CSS file
 		.pipe(postcss([autoprefixer(), cssnano()])) // postcss() runs two other plugins, autoprefixer() to add vendor prefixes & cssnano() to minify the CSS file
 		.pipe(concat("main.css")) // concatenate all the css files into one css file
+		.pipe(rename({ suffix: ".min" }))
 		.pipe(sourcemaps.write(".")) // creates the sourcemaps file in the same directory.
-		.pipe(dest("dist/css")); // put the final CSS file and CSS sourcemaps file in the /dist folder
-}
+		.pipe(dest(filePaths.styles.output)); // put the final CSS file and CSS sourcemaps file in the /dist folder
+};
 
 // JS task: concatenates and uglifies JS files to script.js
-function jsTask() {
-	return src([files.jsPath]) // load the JS files from files.jsPath
+const buildScripts = function (done) {
+	// Make sure this feature is activated before running
+	if (!settings.scripts) return done();
+
+	return src(filePaths.scripts.input) // load the JS files from files.jsPath
 		.pipe(concat("main.js")) // concatenate all the JS files into one JS file
 		.pipe(uglify()) // uglify/minify the JS file
-		.pipe(dest("dist/js")); // move the final JS file into the /dist folder
-}
+		.pipe(rename({ suffix: ".min" }))
+		.pipe(dest(filePaths.scripts.output)); // move the final JS file into the /dist folder
+};
 
-function imageTask() {
-	return src(files.imagePath).pipe(
-		dest("dist/img") // move images to the build folder
-	);
-}
+// move images to the build folder
+const moveImages = function (done) {
+	// Make sure this feature is activated before running
+	if (!settings.images) return done();
 
-function fontsTask() {
-	return src(files.fontsPath).pipe(
-		dest("dist/fonts") // move fonts to the build folder
-	);
-}
-// Cachebust
-function cacheBustTask() {
+	return src(filePaths.images.input).pipe(dest(filePaths.images.output));
+};
+
+// move fonts to the build folder
+const moveFonts = function (done) {
+	if (!settings.fonts) return done();
+
+	return src(filePaths.fonts.input).pipe(dest(filePaths.fonts.output));
+};
+
+// Bust cache
+const bustCache = function (done) {
+	if (!settings.bustCache) return done();
+
 	let cbString = new Date().getTime();
-	return src(files.cacheBustPath)
-		.pipe(replace(/cb=\d+/g, "cb=" + cbString))
+	return src(filePaths.bustCache)
+		.pipe(replace(/cb=\d+/g, "cb=" + cbString)) // search for strings including  “cb=” (ex. "style.css?cb=123"), and replace it with current time in milleseconds
 		.pipe(dest("."));
-}
+};
+
+// Remove pre-existing content from output folders
+const cleanDist = function (done) {
+	// Make sure this feature is activated before running
+	if (!settings.clean) return done();
+
+	// Clean the dist folder
+	del.sync([filePaths.output]);
+
+	// Signal completion
+	return done();
+};
 
 // Watch task: watch SCSS and JS files for changes
 // If any change, run scss and js tasks simultaneously
-function watchTask() {
+const watchFiles = function (done) {
 	watch(
-		[files.scssPath, files.jsPath, files.imagePath, files.fontsPath], // watch the files in our scssPath and jsPath directories
-		series(parallel(scssTask, jsTask, imageTask, fontsTask), cacheBustTask) // if any changes are made in files, run these tasks simultaneously
+		[filePaths.styles.input, filePaths.scripts.input, filePaths.images.input, filePaths.fonts.input], // watch the files in these directories
+		series(parallel(buildStyles, buildScripts, moveImages, moveFonts), bustCache) // if any changes are made in files, run these tasks simultaneously
 	);
-}
+};
 
 // Export the default Gulp task so it can be run automatically run if you type in gulp on the command line
-exports.default = series(parallel(scssTask, jsTask, imageTask, fontsTask), cacheBustTask, watchTask); // Runs the tasks simultaneously and then runs cacheBust, then watch task
+exports.default = series(parallel(cleanDist, buildStyles, buildScripts, moveImages, moveFonts), bustCache, watchFiles); // Runs the tasks simultaneously and then runs bustCache, then watch task
