@@ -22,15 +22,17 @@ After various blocks and menus have been added, you should be able to cut down t
 
 -   Cache buster based on file hash(so that you will always have cahce busting enabled by default & build times are shorter if you don´t need to run the whole build every time you change the CSS file). Add separate watchers
 -   "gulp zip" to zip up all completed theme files(and leaving unneeded dev files behind)
--   Rename theme slug, name, theme folder, script names, etc based on theme name variable during the inital theme compialtion(\_s github readme has good directions)
+-   Rename theme slug, name, theme folder, script names, etc based on theme name variable during the inital theme compialtion(\_s github readme has good directions).  
+    Kui theme files rename toimub, siis ära unusta ära asendada ka wp_dequeue_script( '\_s-navigation' ); scripti jupp mis läheb functions.phpsse. Muidu saab link 404
 -   Move all optional settings to a separate gulp-buil-file. Oterwise the gulpfile can get quite long, messy and confusing
--   Take logo & primary colors, and output branded login screen (need to create a single place for all color variables and lgog file)
+-   Take logo variable & primary colors, and output branded login screen (need to create a single place for all color variables and logo file)
 -   set and import fonts globally, if enabled. otherwise use system font stack
 -   some sort of grid system would be nice to be already included. Otherwise will ahve to include Bootstraps one again :´(
 -   Don´t queue root/woocommerce.css file on the frontend. Don´t add wooCommerce if wooCommerce if wooCommerce hasn´t been set to true under settings.
 -   eemalda kõik kommentaarid(ka PHP failidest), sinu build protsessi käigus
 -   images, lisa samasugune in post gallery nagu medium asi mille sa tegid. Kehtib kõikide postitustes olevate piltidele. High effort, low reward enamike lehekülgede jaoks, aga kui töötab siis on kliendile muljetavaldav
 -   7.1 sass Architecture
+-   add \_normalize.scss to be added and imported automatically as a first css file? (can get it from bootstrap)
 
 ---
 
@@ -55,7 +57,7 @@ Built on Elementor Hello theme(so that Piret can participate by styling)
 ### List of theme options
 
 -   wooCommerce included, yes/no
--   have comments vs. no comments
+-   have comments vs. no comments (Will it help if you remove add comments block in PHP?)
 -   woocommerce, add-to-basket animation?
 -   multilanguage or not (lisab headerisse keelevaliku widget area ära)
 -   mobile nav (alguses üks ja hiljem juba valik kolm erinevat animatsiooni ja avamsit)
@@ -109,7 +111,7 @@ Built on Elementor Hello theme(so that Piret can participate by styling)
 
 # NON-CODE PROCESS
 
-## pakkumoste template pre-built
+## Pakkumiste template pre-built
 
 Ette valmistatud pakkumiste põhi, mille saab pärast vestlust ja kiiret mudimist kohe kliendile edasi saata. Oleks rohkem lahti selgitatud mis väärtust see kliendile annab ja kuidas me seda teema. Avatud suhtlus.
 
