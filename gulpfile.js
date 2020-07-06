@@ -4,14 +4,14 @@
  */
 const settings = {
 	clean: true,
-	styles: true, // sass files
-	scripts: true,
-	images: true,
-	fonts: true,
-	bustCache: true,
+	styles: false, // sass files
+	scripts: false,
+	images: false,
+	fonts: false,
+	bustCache: false,
 	//	reload: true,
 
-	wordpress: false, // use to configure wordpress build options(found under gulpfile-wp.js)
+	wordpress: true, // use to configure wordpress build options(found under gulpfile-wp.js)
 };
 
 /**
@@ -21,22 +21,29 @@ const filePaths = {
 	input: "src/",
 	output: "dist/",
 	styles: {
-		input: "src/scss/**/*.scss",
+		input: "src/dev/sass/**/*.scss",
 		output: "dist/css/",
 	},
 	scripts: {
-		input: "src/js/**/*.js",
+		input: "src/dev/js/**/*.js",
 		output: "dist/js/",
 	},
 	images: {
-		input: "src/img/**/*.+(svg|png)",
+		input: "src/dev/img/**/*.+(svg|png)",
 		output: "dist/img/",
 	},
 	fonts: {
-		input: "src/fonts/**/*.+(woff|woff2)",
+		input: "src/dev/fonts/**/*.+(woff|woff2)",
 		output: "dist/fonts/",
 	},
 	bustCache: ["footer.php", "header.php"],
+
+	moveWPTheme: {
+		input: "src/wp/themes/_s/**/*.+(php|js|css|pot|txt|png)",
+		output: "./",
+		inputSass: "src/wp/themes/_s/**/*.scss",
+		outputSass: "src/dev",
+	},
 };
 
 // General modules
@@ -124,6 +131,19 @@ const cleanDist = function (done) {
 	return done();
 };
 
+// Take fresh copy of a theme, and pipe it to root folder
+const compileTheme = function (done) {
+	if (!settings.wordpress) return done();
+
+	src(filePaths.moveWPTheme.inputSass).pipe(dest(filePaths.moveWPTheme.outputSass)); // move sass files from default theme root/sass to under src/dev/sass
+	return src(filePaths.moveWPTheme.input).pipe(dest(filePaths.moveWPTheme.output)); // move "_s" theme files to root folder. This way the theme is recognizable to the WordPress install
+};
+
+/* const compileTheme = function (done) {
+	if (!settings.wordpress) return done();
+	return src(filePaths.moveWPTheme.inputSass).pipe(dest(filePaths.moveWPTheme.outputSass));
+} */
+
 // Watch task: watch SCSS and JS files for changes
 // If any change, run scss and js tasks simultaneously
 const watchFiles = function (done) {
@@ -135,3 +155,4 @@ const watchFiles = function (done) {
 
 // Export the default Gulp task so it can be run automatically run if you type in gulp on the command line
 exports.default = series(parallel(cleanDist, buildStyles, buildScripts, moveImages, moveFonts), bustCache, watchFiles); // Runs the tasks simultaneously and then runs bustCache, then watch task
+exports.compileTheme = compileTheme;
