@@ -1,3 +1,27 @@
+# Ignore _s theme files for this git
+# Focus on only the build process. Theme modifications will be done elsewhere
+inc/
+js/
+languages/
+template-parts/
+404.php
+archive.php
+comments.php
+footer.php
+functions.php
+header.php
+index.php
+page.php
+readme.txt
+screenshot.png
+search.php
+sidebar.php
+single.php
+style.css
+style-rtl.css
+woocommerce.css
+src/dev/sass/
+
 # Logs
 logs
 *.log
