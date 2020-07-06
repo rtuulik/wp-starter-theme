@@ -11,7 +11,7 @@ const settings = {
 	bustCache: true,
 	//	reload: true,
 
-	wordpress: false,
+	wordpress: false, // use to configure wordpress build options(found under gulpfile-wp.js)
 };
 
 /**
