@@ -30,3 +30,7 @@ Võta main-theme värvid ja pipe logo ja selle sisu uude kasuta
 *   Add:
 *   automatically import form stylings
 *   automatically importbutton stylings \*/
+
+## rename theme files
+
+Kui theme files rename toimub, siis ära unusta ära asendada ka wp_dequeue_script( '\_s-navigation' ); scripti jupp mis läheb functions.phpsse. Muidu saab link 404
