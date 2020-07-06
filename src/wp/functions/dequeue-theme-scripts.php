@@ -11,13 +11,3 @@ function reigo_enqueue_theme_scripts(){
 	wp_enqueue_style( 'main.min.css', get_template_directory_uri() . '/dist/css/main.min.css', array(), null, 'all');
 }
 add_action( 'wp_enqueue_scripts', 'reigo_enqueue_theme_scripts', 100 );
-
-
-// saad kasutada seda ja pass-ida siia versiooninumbri asemel cache buster hashi 
-// wp_enqueue_script( 'script-name', get_template_directory_uri() . '/dist/js/main.min.js', array(), '1.0.0', true );
-// wp_enqueue_style( 'main.min.css', get_template_directory_uri() . '/dist/css/main.min.css', array(), '1.1', 'all');	
-
-/* 
- * remove link to woocomerrce.css if selection is false 
- * 
- * */
