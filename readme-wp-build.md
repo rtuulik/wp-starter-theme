@@ -1,3 +1,7 @@
+## Improve
+
+-   add \_normalize.scss to be added and imported automatically as a first css file (can get it from bootstrap)
+
 ### Remove comments
 
 /removeComments.php Just import or include them in functions.php
