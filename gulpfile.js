@@ -70,6 +70,7 @@ const rename = require("gulp-rename");
 const sourcemaps = require("gulp-sourcemaps"); // maps the CSS styles back to the original SCSS file in your browser dev tools
 const replace = require("gulp-replace"); // add a string parameter to CSS/JS references for cache bust
 const fs = require("fs"); // used to create files and their contents
+var footer = require("gulp-footer");
 
 // Styles
 const sass = require("gulp-sass"); //  compiles SCSS to CSS
@@ -163,6 +164,9 @@ const compileTheme = function (done) {
 	fs.existsSync("src/dev/") || fs.mkdirSync("src/dev/"); // create folders first, otherwise the whole process fails
 	fs.existsSync("src/dev/js/") || fs.mkdirSync("src/dev/js/");
 	fs.existsSync("src/dev/sass/") || fs.mkdirSync("src/dev/sass/");
+	fs.existsSync("src/dev/fonts/") || fs.mkdirSync("src/dev/fonts/");
+	fs.existsSync("src/dev/img/") || fs.mkdirSync("src/dev/img/");
+
 	fs.writeFileSync("src/dev/js/shame.js", "// place to put all the temporary things you promise to fix \n"); // create shame.js
 	fs.writeFileSync("src/dev/sass/_variables.scss", "");
 	fs.writeFileSync("src/dev/sass/_typography.scss", "");
@@ -171,7 +175,38 @@ const compileTheme = function (done) {
 	fs.writeFileSync("src/dev/sass/style.scss", '@import "_variables.scss"; \n@import "_colors"; \n@import "_typography.scss"; \n@import "_shame.scss"; \n');
 
 	// move "_s" theme files to root folder. This way the theme is recognizable to the WordPress install
-	return src(filePaths.underscoresTheme.input).pipe(dest(filePaths.underscoresTheme.output));
+	src(filePaths.underscoresTheme.input).pipe(dest(filePaths.underscoresTheme.output));
+
+	return done();
+};
+
+const disableEmbeds = function (done) {
+	if (!settingsWPFunctions.disableEmbeds) return done();
+	src("functions.php").pipe(footer("\nrequire get_template_directory() . '/inc/disable-embeds.php';")).pipe(dest("."));
+	return src("src/wp/functions/disable-embeds/disable-embeds.php").pipe(dest("inc/"));
+};
+
+const disableEmoji = function (done) {
+	if (!settingsWPFunctions.disableEmoji) return done();
+	src("functions.php").pipe(footer("\nrequire get_template_directory() . '/inc/disable-emoji.php';")).pipe(dest("."));
+	return src("src/wp/functions/disable-emoji/disable-emoji.php").pipe(dest("inc/"));
+};
+
+const redirectAttachmentPages = function (done) {
+	if (!settingsWPFunctions.redirectAttachmentPages) return done();
+	src("functions.php").pipe(footer("\nrequire get_template_directory() . '/inc/redirect-attachment-pages-to-parent.php';")).pipe(dest("."));
+	return src("src/wp/functions/redirect-attachment-pages/redirect-attachment-pages-to-parent.php").pipe(dest("inc/"));
+};
+
+const removeComments = function (done) {
+	if (!settingsWPFunctions.removeComments) return done();
+	src("functions.php").pipe(footer("\nrequire get_template_directory() . '/inc/remove-comments.php';")).pipe(dest("."));
+	return src("src/wp/functions/remove-comments/remove-comments.php").pipe(dest("inc/"));
+};
+
+const deququeScripts = function (done) {
+	src("functions.php").pipe(footer("\nrequire get_template_directory() . '/inc/dequeue-theme-scripts.php';")).pipe(dest("."));
+	return src("src/wp/functions/dequeue-theme-scripts.php").pipe(dest("inc/"));
 };
 
 // Watch task: watch SCSS and JS files for changes
@@ -185,5 +220,27 @@ const watchFiles = function (done) {
 
 // Export the default Gulp task so it can be run automatically run if you type in gulp on the command line
 exports.default = series(parallel(cleanDist, buildStyles, buildScripts, moveImages, moveFonts), bustCache, watchFiles); // Runs the tasks simultaneously and then runs bustCache, then watch task
-exports.compileTheme = compileTheme;
+exports.compileTheme = series(compileTheme);
+
+// NB! can´t call
+exports.addFunctions = series(disableEmbeds, disableEmoji, redirectAttachmentPages, removeComments, deququeScripts); // move all needed files to functions.php
+
+/* 
+*
+* playing around with renaming things inside the files
 exports.buildStyles = buildStyles;
+//exports.compileTheme = series('compileTheme', 'coffee')
+exports.coffee = coffee;
+
+const coffee = function (done) {
+	/* 	let cbString = new Date().getTime();
+	src("./functions.php")
+		.pipe(replace(/cb=\d+/g, "cb=" + cbString)) // search for strings including  “cb=” (ex. "style.css?cb=123"), and replace it with current time in milleseconds
+		.pipe(dest(".")); */
+
+/*	src(["functions.php"]).pipe(replace("/js/navigation.js", "uustext")).pipe(dest("."));
+
+	return done();
+};
+
+ */
