@@ -2,17 +2,13 @@
 
 1. Download repo
 2. npm install
-3. run commands..
-
-## Commands
-
-1.  "gulp compileTheme"  
-    Will take latest undescores theme and move files around for the most convinient development
-2.  "gulp addFunctions"  
-    temporarily have to give two commands to build theme
-3.  "gulp"  
-    Will compile sass/js/font/img files
-4.  All done
+3. "gulp compileTheme"  
+   Will take latest undescores theme and move files around for the most convinient development
+4. "gulp addFunctions"  
+   temporarily have to give two commands to build theme
+5. "gulp"  
+   Will compile sass/js/font/img files
+6. Build your theme..
 
 # DATED:
 
