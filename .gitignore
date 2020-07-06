@@ -20,7 +20,9 @@ single.php
 style.css
 style-rtl.css
 woocommerce.css
-src/dev/sass/
+src/dev/underScoresSass/
+src/dev/sass
+src/dev/js
 
 # Logs
 logs

@@ -1,28 +1,28 @@
 {
-  "name": "starter-theme-dev",
-  "version": "1.0.0",
-  "description": "Starter theme build with Piret. Built on Elementor Hello theme.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "github.com:rtuulik/wp-starter-theme.git"
-  },
-  "author": "Reigo Tuulik",
-  "license": "ISC",
-  "devDependencies": {
-    "autoprefixer": "^9.8.4",
-    "cssnano": "^4.1.10",
-    "del": "^5.1.0",
-    "gulp": "^4.0.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-postcss": "^8.0.0",
-    "gulp-rename": "^2.0.0",
-    "gulp-replace": "^1.0.0",
-    "gulp-sass": "^4.1.0",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-uglify": "^3.0.2"
-  }
+	"name": "starter-theme-dev",
+	"version": "1.0.0",
+	"description": "Starter theme build with Piret. Built on Elementor Hello theme.",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "github.com:rtuulik/wp-starter-theme.git"
+	},
+	"author": "Reigo Tuulik",
+	"license": "ISC",
+	"devDependencies": {
+		"autoprefixer": "^9.8.4",
+		"cssnano": "^4.1.10",
+		"del": "^5.1.0",
+		"gulp": "^4.0.2",
+		"gulp-concat": "^2.6.1",
+		"gulp-postcss": "^8.0.0",
+		"gulp-rename": "^2.0.0",
+		"gulp-replace": "^1.0.0",
+		"gulp-sass": "^4.1.0",
+		"gulp-sourcemaps": "^2.6.5",
+		"gulp-terser": "^1.2.0"
+	}
 }

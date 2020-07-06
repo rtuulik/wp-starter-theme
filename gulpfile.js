@@ -4,15 +4,27 @@
  */
 const settings = {
 	clean: true,
-	styles: false, // sass files
-	scripts: false,
+	styles: true, // sass files
+	scripts: true,
 	images: false,
 	fonts: false,
 	bustCache: false,
 	//	reload: true,
 
+	wooCommerse: undefined, // kas lisada/eemaldada Woo css ja faili templated (pluss hiljem ka muud asjad, product galeriid jms)
 	wordpress: true, // use to configure wordpress build options(found under gulpfile-wp.js)
 };
+
+const settingsWPFunctions = {
+	disableEmbeds: true,
+	disableEmoji: true,
+	redirectAttachmentPages: true,
+	removeComments: true,
+};
+
+/* const settingsWPStyles = {
+	styleloginpage = false,		// need to replace default color values (if no loga, then uses WP default logo img)
+} */
 
 /**
  * Paths to project files
@@ -38,11 +50,16 @@ const filePaths = {
 	},
 	bustCache: ["footer.php", "header.php"],
 
-	moveWPTheme: {
-		input: "src/wp/themes/_s/**/*.+(php|js|css|pot|txt|png)",
+	underscoresTheme: {
+		input: "src/wp/themes/_s/**/*.+(php|css|pot|txt|png)",
 		output: "./",
-		inputSass: "src/wp/themes/_s/**/*.scss",
-		outputSass: "src/dev",
+
+		moveSassinput: "src/wp/themes/_s/sass/**/*.scss",
+		moveSassOutput: "src/dev/sass/underscores",
+		sassFiles: "src/dev/underscores/**/*.scss",
+		allSassFiles: "./src/dev/**/*.scss",
+		moveJSinput: "src/wp/themes/_s/js/**/*.js",
+		moveJSOutput: "src/dev/js/",
 	},
 };
 
@@ -52,6 +69,7 @@ const del = require("del"); // Delete files and directories using globs
 const rename = require("gulp-rename");
 const sourcemaps = require("gulp-sourcemaps"); // maps the CSS styles back to the original SCSS file in your browser dev tools
 const replace = require("gulp-replace"); // add a string parameter to CSS/JS references for cache bust
+const fs = require("fs"); // used to create files and their contents
 
 // Styles
 const sass = require("gulp-sass"); //  compiles SCSS to CSS
@@ -61,18 +79,18 @@ const cssnano = require("cssnano"); // minifies CSS
 
 // Scripts
 const concat = require("gulp-concat"); // concatenates multiple JS files into one file
-const uglify = require("gulp-uglify"); // minifies JS
+const terser = require("gulp-terser"); // minifies JS. gulp-uglify doesn´t support ES6 syntax
 
 /**
  * Gulp Tasks
  */
 
-// Sass task: compiles the style.scss file into style.css
+// Sass task: compiles the sass files into one main style.min.css
 const buildStyles = function (done) {
 	// Make sure this feature is activated before running
 	if (!settings.styles) return done();
 
-	return src(filePaths.styles.input)
+	return src(filePaths.underscoresTheme.allSassFiles) // filePaths.underscoresTheme.moveSassOutput
 		.pipe(sourcemaps.init()) // sourcemaps needs to be added first after src()
 		.pipe(sass()) // does the compiling of all the SCSS files to one CSS file
 		.pipe(postcss([autoprefixer(), cssnano()])) // postcss() runs two other plugins, autoprefixer() to add vendor prefixes & cssnano() to minify the CSS file
@@ -82,14 +100,14 @@ const buildStyles = function (done) {
 		.pipe(dest(filePaths.styles.output)); // put the final CSS file and CSS sourcemaps file in the /dist folder
 };
 
-// JS task: concatenates and uglifies JS files to script.js
+// JS task: concatenates and minifies JS files to script.js
 const buildScripts = function (done) {
 	// Make sure this feature is activated before running
 	if (!settings.scripts) return done();
 
 	return src(filePaths.scripts.input) // load the JS files from files.jsPath
 		.pipe(concat("main.js")) // concatenate all the JS files into one JS file
-		.pipe(uglify()) // uglify/minify the JS file
+		.pipe(terser()) // minify the JS file. gulp-uglify doesn´t support ES6 syntax
 		.pipe(rename({ suffix: ".min" }))
 		.pipe(dest(filePaths.scripts.output)); // move the final JS file into the /dist folder
 };
@@ -135,20 +153,32 @@ const cleanDist = function (done) {
 const compileTheme = function (done) {
 	if (!settings.wordpress) return done();
 
-	src(filePaths.moveWPTheme.inputSass).pipe(dest(filePaths.moveWPTheme.outputSass)); // move sass files from default theme root/sass to under src/dev/sass
-	return src(filePaths.moveWPTheme.input).pipe(dest(filePaths.moveWPTheme.output)); // move "_s" theme files to root folder. This way the theme is recognizable to the WordPress install
-};
+	// move _s sass files from theme root to src/dev/sass
+	src(filePaths.underscoresTheme.moveSassinput).pipe(dest(filePaths.underscoresTheme.moveSassOutput));
 
-/* const compileTheme = function (done) {
-	if (!settings.wordpress) return done();
-	return src(filePaths.moveWPTheme.inputSass).pipe(dest(filePaths.moveWPTheme.outputSass));
-} */
+	// move _s js files from root to under src/dev/js
+	src(filePaths.underscoresTheme.moveJSinput).pipe(dest(filePaths.underscoresTheme.moveJSOutput));
+
+	// create sass & js folders in dev folder, and create basic structure for users sass & JS files
+	fs.existsSync("src/dev/") || fs.mkdirSync("src/dev/"); // create folders first, otherwise the whole process fails
+	fs.existsSync("src/dev/js/") || fs.mkdirSync("src/dev/js/");
+	fs.existsSync("src/dev/sass/") || fs.mkdirSync("src/dev/sass/");
+	fs.writeFileSync("src/dev/js/shame.js", "// place to put all the temporary things you promise to fix \n"); // create shame.js
+	fs.writeFileSync("src/dev/sass/_variables.scss", "");
+	fs.writeFileSync("src/dev/sass/_typography.scss", "");
+	fs.writeFileSync("src/dev/sass/_colors.scss", "");
+	fs.writeFileSync("src/dev/sass/_shame.scss", "");
+	fs.writeFileSync("src/dev/sass/style.scss", '@import "_variables.scss"; \n@import "_colors"; \n@import "_typography.scss"; \n@import "_shame.scss"; \n');
+
+	// move "_s" theme files to root folder. This way the theme is recognizable to the WordPress install
+	return src(filePaths.underscoresTheme.input).pipe(dest(filePaths.underscoresTheme.output));
+};
 
 // Watch task: watch SCSS and JS files for changes
 // If any change, run scss and js tasks simultaneously
 const watchFiles = function (done) {
 	watch(
-		[filePaths.styles.input, filePaths.scripts.input, filePaths.images.input, filePaths.fonts.input], // watch the files in these directories
+		[filePaths.styles.input, filePaths.underscoresTheme.moveSassOutput, filePaths.scripts.input, filePaths.images.input, filePaths.fonts.input], // watch the files in these directories
 		series(parallel(buildStyles, buildScripts, moveImages, moveFonts), bustCache) // if any changes are made in files, run these tasks simultaneously
 	);
 };
@@ -156,3 +186,4 @@ const watchFiles = function (done) {
 // Export the default Gulp task so it can be run automatically run if you type in gulp on the command line
 exports.default = series(parallel(cleanDist, buildStyles, buildScripts, moveImages, moveFonts), bustCache, watchFiles); // Runs the tasks simultaneously and then runs bustCache, then watch task
 exports.compileTheme = compileTheme;
+exports.buildStyles = buildStyles;
