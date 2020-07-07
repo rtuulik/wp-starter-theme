@@ -59,7 +59,7 @@ const filePaths = {
 		sassFiles: "src/dev/underscores/**/*.scss",
 		allSassFiles: "./src/dev/**/*.scss",
 		moveJSinput: "src/wp/themes/_s/js/**/*.js",
-		moveJSOutput: "src/dev/js/",
+		moveJSOutput: "js/", // "src/dev/js/",
 	},
 };
 
