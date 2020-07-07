@@ -50,6 +50,7 @@ Built on Elementor Hello theme(so that Piret can participate by styling)
     Ühes kohas lihtsasti muudetav/valikuid muudetav ja deploy-itav cookiede GDPR-ile vastav valik. Ex. Lihtsalt lisa variables: cookie nimi, mis kategooria, kas sisse/väljalülitatav, juba sees või väljas, ja tekst selle kohta. Build ajal ehitab ise automaatselt.  
     Lisaks ka tõlkefailid
 -   Google Analytics add. With a safeguard that it isn´t active when you are on local dev
+-   favicon quick setup. Ühes kohas sisetad ühe faili ja siis genereerib ja lisab kõik vajaliku õigesse kohta ära
 -   Several prebuilt responive menus with different designs
 -   Automatic deployments from local build/Guthub.  
     https://css-tricks.com/continuous-deployments-for-wordpress-using-github-actions/

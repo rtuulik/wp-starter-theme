@@ -164,15 +164,16 @@ const compileTheme = function (done) {
 	fs.existsSync("src/dev/") || fs.mkdirSync("src/dev/"); // create folders first, otherwise the whole process fails
 	fs.existsSync("src/dev/js/") || fs.mkdirSync("src/dev/js/");
 	fs.existsSync("src/dev/sass/") || fs.mkdirSync("src/dev/sass/");
+	fs.existsSync("src/dev/sass/user") || fs.mkdirSync("src/dev/sass/user");
 	fs.existsSync("src/dev/fonts/") || fs.mkdirSync("src/dev/fonts/");
 	fs.existsSync("src/dev/img/") || fs.mkdirSync("src/dev/img/");
 
 	fs.writeFileSync("src/dev/js/shame.js", "// place to put all the temporary things you promise to fix \n"); // create shame.js
-	fs.writeFileSync("src/dev/sass/_variables.scss", "");
-	fs.writeFileSync("src/dev/sass/_typography.scss", "");
-	fs.writeFileSync("src/dev/sass/_colors.scss", "");
-	fs.writeFileSync("src/dev/sass/_shame.scss", "");
-	fs.writeFileSync("src/dev/sass/style.scss", '@import "_variables.scss"; \n@import "_colors"; \n@import "_typography.scss"; \n@import "_shame.scss"; \n');
+	fs.writeFileSync("src/dev/sass/user/_variables.scss", "");
+	fs.writeFileSync("src/dev/sass/user/_typography.scss", "");
+	fs.writeFileSync("src/dev/sass/user/_colors.scss", "");
+	fs.writeFileSync("src/dev/sass/user/_shame.scss", "");
+	fs.writeFileSync("src/dev/sass/user/style.scss", '@import "_variables.scss"; \n@import "_colors"; \n@import "_typography.scss"; \n@import "_shame.scss"; \n');
 
 	// move "_s" theme files to root folder. This way the theme is recognizable to the WordPress install
 	src(filePaths.underscoresTheme.input).pipe(dest(filePaths.underscoresTheme.output));
