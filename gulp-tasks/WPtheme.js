@@ -35,19 +35,19 @@ const filePaths = {
 	input: "src/",
 	output: "dist/",
 	styles: {
-		input: "src/dev/sass/**/*.scss",
+		input: "dev/sass/**/*.scss",
 		output: "dist/css/",
 	},
 	scripts: {
-		input: "src/dev/js/**/*.js",
+		input: "dev/js/**/*.js",
 		output: "dist/js/",
 	},
 	images: {
-		input: "src/dev/img/**/*.+(svg|png)",
+		input: "dev/img/**/*.+(svg|png)",
 		output: "dist/img/",
 	},
 	fonts: {
-		input: "src/dev/fonts/**/*.+(woff|woff2)",
+		input: "dev/fonts/**/*.+(woff|woff2)",
 		output: "dist/fonts/",
 	},
 	bustCache: ["footer.php", "header.php"],

@@ -21,10 +21,7 @@ style.css
 style-rtl.css
 woocommerce.css
 # dev folders
-dev/fonts
-dev/img
-dev/js
-dev/sass
+dev/
 
 
 ##############################################
