@@ -7,12 +7,13 @@ After various blocks and menus have been added, you should be able to cut down t
 
 1. Download repo
 2. "npm install" for all of your devDependency needs
-3. ~~Go through settings.js and select your theme options, blocks & settings~~ (settings are work in process currently)
+3. ~~Go through settings.js and select your theme options, blocks & settings~~ (work in process currently). Current available settings are available under src/gulp/WPtheme.js
 4. Run "gulp compileTheme"  
-   Takes the latest underscores theme and combined with the ~~options you selected, creates you a theme which already includes all needed (native looking)blocks, responsive menus, cookie controls, colors, fonts, logos, speed and various optimizations~~ 2.5. Run "gulp addFunctions", temporary build step. Will be removed later.
-5. Run "gulp" and start coding on the new base theme, already having most of what you need prebuilt
+   Takes the latest underscores theme and combined with the options you selected, ~~creates you a theme which already includes all needed (native looking)blocks, responsive menus, cookie controls, colors, fonts, logos, speed and various optimizations~~
+5. Run "gulp"  
+   Start coding on the new base theme, already having most of what you need prebuilt
 6. Write and adjust your theme as needed. And if you have to build something that is missing, add it to the project.
-7. When you are done, run "gulp zip" and get your theme files nicelly zipped for uploading
+7. ~~When you are done, run "gulp zip" and get your theme files nicelly zipped for uploading~~
 
 ---
 
