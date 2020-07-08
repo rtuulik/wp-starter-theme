@@ -33,6 +33,7 @@ After various blocks and menus have been added, you should be able to cut down t
 -   images, lisa samasugune in post gallery nagu medium asi mille sa tegid. Kehtib kõikide postitustes olevate piltidele. High effort, low reward enamike lehekülgede jaoks, aga kui töötab siis on kliendile muljetavaldav
 -   7.1 sass Architecture
 -   add \_normalize.scss to be added and imported automatically as a first css file? (can get it from bootstrap)
+-   lisa Gutenberg support (\_s on tested until 4.8)
 
 ---
 
@@ -54,6 +55,7 @@ Built on Elementor Hello theme(so that Piret can participate by styling)
 -   Several prebuilt responive menus with different designs
 -   Automatic deployments from local build/Guthub.  
     https://css-tricks.com/continuous-deployments-for-wordpress-using-github-actions/
+-   Google maps added in 5 min. Lihtsalt lisa oma key ja stylingu seaded
 
 ### List of theme options
 
@@ -160,3 +162,19 @@ Automaatne käibemaksu arvutamine ja lisamine EU piires
 Võimaluse korral ka mingil kujul automatiseeritud lihtsustatud käibemaksu deklaratsioone esitus eri riikidele (või vähemalt selged juhendid kliendile, mida ta peaks tegema ja kuidas. Me oleme eksperdid, me oleme one-stop-shop täislahendustega, me lihtsalt ei kirjuta koodi ja disaini, me nõustame kliente ja hästi)  
 Pangalinkide generaator  
 https://blog.zone.ee/pangalingid/
+
+### Misc asjad mida saab kliendile kiirelt ära teha väärtuse tõstmiseks
+
+-   Google mapsis äri registreerida ja adnmed sisestada. Siis näiteks kui sisestad firma nime, ta oskab kohe suunata sinna, ilma aadressi vaja sisestamata
+
+---
+
+# Checklist asjadele mida teha iga kord kliendi saiti hakates arendama
+
+### Vanilla WP set up steps. Asjad mida muuta/kiirelt importida WP seadetes kohe pärast clean installi
+
+-   default wp image settings change to 300/600/1200 (or better?)
+
+### Enne ülesse panekut
+
+-   "discourage search engines" checkbox maha võtta
